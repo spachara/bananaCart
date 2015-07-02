@@ -46,6 +46,14 @@
 </head>
 
 <body class="ng-cloak">
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3&appId=1589382601320883";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 	<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>
 	<section class="content">
 		<section class="container">
@@ -67,7 +75,7 @@
 	<!--Livereload script rendered -->
 	<script type="text/javascript" src="http://{{request.hostname}}:35729/livereload.js"></script>
 	{% endif %}
-
+	<div ng-hide="true" class="fb-like pull-right" data-href="https://www.facebook.com/crosstwelfth" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
 	<!--[if lt IE 9]>
 	<section class="browsehappy jumbotron hide">
 		<h1>Hello there!</h1>

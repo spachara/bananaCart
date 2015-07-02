@@ -3,6 +3,7 @@
 module.exports = {
 	db: {
 		uri: 'mongodb://localhost/mean-dev',
+		//uri: 'mongodb://banana:banana@ds041992.mongolab.com:41992/firstmongo',
 		options: {
 			user: '',
 			pass: ''
@@ -21,8 +22,8 @@ module.exports = {
 		title: 'MEAN.JS - Development Environment'
 	},
 	facebook: {
-		clientID: process.env.FACEBOOK_ID || 'APP_ID',
-		clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',
+		clientID: process.env.FACEBOOK_ID || '1589383301320813',
+		clientSecret: process.env.FACEBOOK_SECRET || '56cf23beec6a718260acf1bf5e27dc7b',
 		callbackURL: '/auth/facebook/callback'
 	},
 	twitter: {

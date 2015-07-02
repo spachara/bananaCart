@@ -1,0 +1,54 @@
+<section data-ng-controller="CategoriesController" data-ng-init="findOne()">
+	<div class="page-header">
+		<h1 data-ng-bind="category.name"></h1>
+	</div>
+	<div class="form-group text-right">
+		<div class="text-right" data-ng-show="((authentication.user) && (authentication.user._id == category.user._id))">
+			<a class="btn btn-default"  tooltip="Back to Lists" ng-click="navClick.list()">
+				<i class="glyphicon glyphicon-arrow-left"></i>
+			</a>
+			<a class="btn btn-success"  tooltip="Add new Category" ng-click="navClick.add()">
+				<i class="glyphicon glyphicon-plus"></i>
+			</a>
+			<a class="btn btn-primary"  tooltip="Edit this Category" href="/#!/categories/{{category._id}}/edit">
+				<i class="glyphicon glyphicon-edit"></i>
+			</a>
+			<a class="btn btn-danger" tooltip="Delete this Category"  data-ng-click="openConfirm('sm',category);">
+				<i class="glyphicon glyphicon-trash"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-md-12">
+				<table class="table table-striped">
+					<tr>
+						<td>
+							<strong>Code:</strong>
+						</td>
+						<td>
+							{{category.code}}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<strong>Name:</strong>
+						</td>
+						<td>
+							{{category.name}}
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+	</div>
+	<div class="col-md-12">
+		<div class="pull-right">
+			<small>
+				<em class="text-muted">
+					Created/Updated on
+					<span data-ng-bind="category.created | date:'mediumDate'"></span>
+					by
+					<span data-ng-bind="category.user.displayName"></span>
+				</em>
+			</small>
+		</div>
+	</div>
+</section>
