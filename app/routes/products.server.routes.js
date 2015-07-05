@@ -19,7 +19,4 @@ module.exports = function(app) {
 
 	// Finish by binding the Product middleware
 	app.param('productId', products.productByID);
-
-	app.route('/productupload')
-        .post(users.requiresLogin, multipartyMiddleware, products.createWithUpload);
 };

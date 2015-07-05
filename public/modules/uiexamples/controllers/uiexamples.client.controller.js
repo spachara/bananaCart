@@ -1,26 +1,20 @@
 'use strict';
 
-// Products controller
-angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Categories', 'Products', 'Upload', '$timeout',
-	function($scope, $stateParams, $location, Authentication, Categories, Products, Upload, $timeout) {
+// Uiexamples controller
+angular.module('uiexamples').controller('UiexamplesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Uiexamples', 'Upload', '$timeout',
+	function($scope, $stateParams, $location, Authentication, Uiexamples, Upload, $timeout) {
 		$scope.authentication = Authentication;
 
-		// Find a list of Categories
-		$scope.findCategories = function() {
-			$scope.Categories = Categories.query();
-		};
-$scope.disabled = false;
-$scope.selectedCategories =[];
-		// Create new Product
+		// Create new Uiexample
 		$scope.create = function() {
-			// Create new Product object
-			var product = new Products ({
+			// Create new Uiexample object
+			var uiexample = new Uiexamples ({
 				name: this.name
 			});
 
 			// Redirect after save
-			product.$save(function(response) {
-				$location.path('products/' + response._id);
+			uiexample.$save(function(response) {
+				$location.path('uiexamples/' + response._id);
 
 				// Clear form fields
 				$scope.name = '';
@@ -29,43 +23,43 @@ $scope.selectedCategories =[];
 			});
 		};
 
-		// Remove existing Product
-		$scope.remove = function(product) {
-			if ( product ) {
-				product.$remove();
+		// Remove existing Uiexample
+		$scope.remove = function(uiexample) {
+			if ( uiexample ) {
+				uiexample.$remove();
 
-				for (var i in $scope.products) {
-					if ($scope.products [i] === product) {
-						$scope.products.splice(i, 1);
+				for (var i in $scope.uiexamples) {
+					if ($scope.uiexamples [i] === uiexample) {
+						$scope.uiexamples.splice(i, 1);
 					}
 				}
 			} else {
-				$scope.product.$remove(function() {
-					$location.path('products');
+				$scope.uiexample.$remove(function() {
+					$location.path('uiexamples');
 				});
 			}
 		};
 
-		// Update existing Product
+		// Update existing Uiexample
 		$scope.update = function() {
-			var product = $scope.product;
+			var uiexample = $scope.uiexample;
 
-			product.$update(function() {
-				$location.path('products/' + product._id);
+			uiexample.$update(function() {
+				$location.path('uiexamples/' + uiexample._id);
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
 		};
 
-		// Find a list of Products
+		// Find a list of Uiexamples
 		$scope.find = function() {
-			$scope.products = Products.query();
+			$scope.uiexamples = Uiexamples.query();
 		};
 
-		// Find existing Product
+		// Find existing Uiexample
 		$scope.findOne = function() {
-			$scope.product = Products.get({
-				productId: $stateParams.productId
+			$scope.uiexample = Uiexamples.get({
+				uiexampleId: $stateParams.uiexampleId
 			});
 		};
 
@@ -124,7 +118,7 @@ $scope.selectedCategories =[];
                          for (var i = 0; i < files.length; i++) {
                              var file = files[i];
                              Upload.upload({
-                                 url: '/productupload',
+                                 url: '/fileupload',
 								method: 'POST',
 								headers: {'Content-Type': 'multipart/form-data'},
                                  fields: {
@@ -183,36 +177,6 @@ $scope.selectedCategories =[];
                    { title:'Dynamic Title 2', content:'Dynamic content 2', disabled: true }
                  ];
 
-
 	}
-]).filter('propsFilter', function() {
-    return function(items, props) {
-      var out = [];
 
-      if (angular.isArray(items)) {
-        items.forEach(function(item) {
-          var itemMatches = false;
-
-          var keys = Object.keys(props);
-          for (var i = 0; i < keys.length; i++) {
-            var prop = keys[i];
-            var text = props[prop].toLowerCase();
-            if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
-              itemMatches = true;
-              break;
-            }
-          }
-
-          if (itemMatches) {
-            out.push(item);
-          }
-        });
-      } else {
-        // Let the output be the input untouched
-        out = items;
-      }
-
-      return out;
-    };
-  });
-
+]);

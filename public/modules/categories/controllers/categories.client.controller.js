@@ -78,9 +78,9 @@ angular.module('categories').controller('CategoriesController', ['$scope', '$sta
 				   { field: 'name'},
 				   { field: 'created', type: 'date', cellFilter: 'date:"dd-MM-yyyy HH:mm"'},
 				   { field: 'user.displayName', name:'user'},
-				   {name:' ', width: '40', enableColumnMenu: false, enableSorting: false, enableFiltering: false,
+				   {name:' ', width: '53', enableColumnMenu: false, enableSorting: false, enableFiltering: false,
 				   cellTemplate:'<a class="btn btn-primary" href="/#!/categories/{{row.entity._id}}/edit"><i class="glyphicon glyphicon-edit"></i></a>'},
-				   {name:'  ', width: '40', enableColumnMenu: false, enableSorting: false, enableFiltering: false,
+				   {name:'  ', width: '53', enableColumnMenu: false, enableSorting: false, enableFiltering: false,
 				   cellTemplate:'<a class="btn btn-danger" data-ng-click="grid.appScope.openConfirm(\'sm\',row.entity); "><i class="glyphicon glyphicon-trash"></i></a>'}
 			  ],
 			  rowTemplate: "<div ng-dblclick=\"grid.appScope.navClick.view(row.entity)\" ng-repeat=\"(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name\" class=\"ui-grid-cell\" ng-class=\"{ 'ui-grid-row-header-cell': col.isRowHeader }\" ui-grid-cell></div>"
@@ -90,7 +90,7 @@ angular.module('categories').controller('CategoriesController', ['$scope', '$sta
 			 $location.path('categories/create');
 		   	},
 			list : function(){
-			$location.path('categories')
+			$location.path('categories');
 			},
 			view : function(category){
 			$location.path('categories/' + category._id);

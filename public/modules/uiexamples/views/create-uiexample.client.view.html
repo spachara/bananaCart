@@ -1,75 +1,25 @@
-<section data-ng-controller="ProductsController" data-ng-init="findCategories()">
+<section data-ng-controller="UiexamplesController">
     <div class="page-header">
-        <h1>New Product</h1>
+        <h1>New Uiexample</h1>
     </div>
-	<div class="row">
-		<div class="col-md-6">
-		</div>
-
-		<div class="col-md-6">
-			<form class="form-horizontal" data-ng-submit="create()" novalidate>
-				<fieldset>
-					<div class="form-group">
-						<label class="control-label">Category</label>
-						<div class="controls">
-						<ui-select on-remove="categoryRemove($item, $model)" on-select="categorySelect($item, $model)"  class="form-control !important"  multiple ng-model="selectedCategories" theme="bootstrap" >
-							<ui-select-match placeholder="Select Categories">{{$item.code}}</ui-select-match>
-							<ui-select-choices repeat="cate in Categories | propsFilter: {name: $select.search, code: $select.search}">
-								<div ng-bind-html="cate.code | highlight: $select.search"></div>
-								<small>
-									name: <span ng-bind-html="''+cate.name | highlight: $select.search"></span>
-								</small>
-							</ui-select-choices>
-						</ui-select>
-						</div>
-						<!--<div class="controls">-->
-							<!--<select multiple  class="form-control" ng-model="hstep" ng-options="opt for opt in options.hstep"></select>-->
-						<!--</div>-->
+	<div class="col-md-12">
+		<form class="form-horizontal" data-ng-submit="create()" novalidate>
+			<fieldset>
+				<div class="form-group">
+					<label class="control-label" for="name">Name</label>
+					<div class="controls">
+						<input type="text" data-ng-model="name" id="name" class="form-control" placeholder="Name" required>
 					</div>
-					<div class="form-group">
-						<label class="control-label" for="name">Code</label>
-						<div class="controls">
-							<input type="text" data-ng-model="code" id="code" class="form-control" placeholder="Code" required>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label" for="name">Name</label>
-						<div class="controls">
-							<input type="text" data-ng-model="name" id="name" class="form-control" placeholder="Name" required>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label" for="name">Description</label>
-						<div class="controls">
-							<input type="text" data-ng-model="desc" id="desc" class="form-control" placeholder="Description" required>
-						</div>
-					</div>
-
-				</fieldset>
-			</form>
-		</div>
-
-	</div>
-
-
-    <div class="col-md-12">
-        <form class="form-horizontal" data-ng-submit="create()" novalidate>
-            <fieldset>
-                <div class="form-group">
-                    <label class="control-label" for="name">Name</label>
-                    <div class="controls">
-                        <input type="text" data-ng-model="name" id="name" class="form-control" placeholder="Name" required>
-                    </div>
-                </div>
+				</div>
 				<div class="form-group">
 					<label class="control-label" for="date">Date</label>
 					<div class="controls">
-					<p class="input-group">
-					<input id="date" type="date" class="form-control" datepicker-popup ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+						<p class="input-group">
+							<input id="date" type="date" class="form-control" datepicker-popup ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
 					  <span class="input-group-btn">
 						<button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 					  </span>
-					</p>
+						</p>
 					</div>
 				</div>
 				<div class="form-group">
@@ -153,10 +103,10 @@
 					</div>
 				</div>
 				<div class="form-group">
-						<label class="control-label">Select</label>
-						<div class="controls">
-							<select class="form-control" ng-model="hstep" ng-options="opt for opt in options.hstep"></select>
-						</div>
+					<label class="control-label">Select</label>
+					<div class="controls">
+						<select class="form-control" ng-model="hstep" ng-options="opt for opt in options.hstep"></select>
+					</div>
 				</div>
 
 				<div class="form-group">
@@ -205,7 +155,7 @@
 					<strong data-ng-bind="error"></strong>
 				</div>
 
-            </fieldset>
-        </form>
-    </div>
+			</fieldset>
+		</form>
+	</div>
 </section>
