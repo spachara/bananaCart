@@ -1,8 +1,9 @@
 'use strict';
 
 // Products controller
-angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Categories', 'Products', 'Upload', '$timeout',
-	function($scope, $stateParams, $location, Authentication, Categories, Products, Upload, $timeout) {
+angular.module('products').controller('ProductsController',
+	['$scope', '$stateParams', '$location', 'Authentication', 'Categories', 'Products', 'Upload', '$timeout','$filter',
+	function($scope, $stateParams, $location, Authentication, Categories, Products, Upload, $timeout, $filter) {
 		$scope.authentication = Authentication;
 
 		// Find a list of Categories
@@ -10,7 +11,10 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 			$scope.Categories = Categories.query();
 		};
 $scope.disabled = false;
-$scope.selectedCategories =[];
+ $scope.colorClick = function($event) {
+// angular.element($event.currentTarget).addClass('selected');
+ };
+
 		// Create new Product
 		$scope.create = function() {
 			// Create new Product object
@@ -104,14 +108,6 @@ $scope.selectedCategories =[];
 
           $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
           $scope.format = $scope.formats[0];
-//radio
-           $scope.radioModel = 'Middle';
-//check box
-           $scope.checkModel = {
-               left: false,
-               middle: true,
-               right: false
-             };
 
 //file upload
              $scope.$watch('files', function () {
@@ -174,8 +170,8 @@ $scope.selectedCategories =[];
 			  	$scope.mstep = 15;
 
 			   $scope.options = {
-				 hstep: [1, 2, 3],
-				 mstep: [1, 5, 10, 15, 25, 30]
+				 supplier: ['supplier_A', 'supplier_B', 'supplier_C'],
+				 stockType: ['in-stock', 'pre-order']
 			   };
 
 			   $scope.tabs = [
@@ -183,9 +179,140 @@ $scope.selectedCategories =[];
                    { title:'Dynamic Title 2', content:'Dynamic content 2', disabled: true }
                  ];
 
+			 $scope.tinymceOptions = {
+				onChange: function(e) {
+				  // put logic here for keypress and cut/paste changes
+				},
+				inline: false,
+				plugins : 'advlist autolink link image lists charmap print preview',
+				skin: 'lightgray',
+				theme : 'modern',
+				min_height: 300,
+				 document_base_url: "localhost:3000/"
+			  };
+
+// $scope.colors = [
+// 	 {order : 3, code: '#F20C0C', name:'red'}
+// 	,{order : 1, code: '#0CF21B', name:'green'}
+// 	,{order : 2, code: '#0C5DF2', name:'blue'}
+// ];
+
+			  $scope.product={
+						categories:[],
+						code: '',
+						name: '',
+						desc: '',
+						modelType: 'Color',
+						models:[
+							{ name:'red',value:'#F20C0C', order: 1, published: false,enable: false, enableDate:'', optionType:'Size',
+								options:[
+									{
+										value:'S',
+										qty: 2,
+										price: 400,
+										unit: 'piece',
+										supplier: '',
+										stockType: '',
+										order: 1
+									},
+									{
+										value:'M',
+										qty: 2,
+										price: 450,
+										unit: 'piece',
+										supplier: '',
+										stockType: '',
+										order: 1
+									},
+									{
+										value:'L',
+										qty: 2,
+										price: 500,
+										unit: 'piece',
+										supplier: '',
+										stockType: '',
+										order: 1
+									}
+								]
+							},
+							{ name:'green',value:'#0CF21B', order: 3, published: false,enable: false, enableDate:'', optionType:'Size',
+								options:[
+										{
+											value:'S',
+											qty: 8,
+											price: 200,
+											unit: 'piece',
+											supplier: '',
+											stockType: '',
+											order: 1
+										},
+										{
+											value:'M',
+											qty: 6,
+											price: 500,
+											unit: 'piece',
+											supplier: '',
+											stockType: '',
+											order: 1
+										},
+										{
+											value:'L',
+											qty: 9,
+											price: 500,
+											unit: 'piece',
+											supplier: '',
+											stockType: '',
+											order: 1
+										}
+									]
+							},
+							{ name:'blue',value:'#0C5DF2', order: 4, published: false,enable: false, enableDate:'', optionType:'Size',
+								options:[
+											{
+												value:'S',
+												qty: 11,
+												price: 400,
+												unit: 'piece',
+												supplier: '',
+												stockType: '',
+												order: 1
+											},
+											{
+												value:'M',
+												qty: 18,
+												price: 450,
+												unit: 'piece',
+												supplier: '',
+												stockType: '',
+												order: 1
+											},
+											{
+												value:'L',
+												qty: 1,
+												price: 500,
+												unit: 'piece',
+												supplier: '',
+												stockType: '',
+												order: 1
+											}
+										]
+								}
+						],
+						tabs:[
+							{ order:1, title:'Overview', content:'Overview', active:true},
+							{ order:2,title:'Delivery', content:'Delivery' },
+							{ order:3,title:'Returns & Exchanges', content:'Returns & Exchanges' },
+							{ order:4,title:'Size Chart', content:'Size Chart' }
+						]
+			  };
+			  $scope.radioModel = {name :  $filter('filter')($scope.product.models, { order: 1 })[0].name};
+               $scope.selectModel= function(name){
+               	$scope.radioModel.name = name;
+               	 $filter('filter')($scope.product.models, { name: name })[0].active = true;
+               };
 
 	}
-]).filter('propsFilter', function() {
+]).filter('categoriesFilter', function() {
     return function(items, props) {
       var out = [];
 

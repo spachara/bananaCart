@@ -18,3 +18,12 @@ body.ng-cloak
 {
 	display: block;
 }
+.btn.color {
+		border-style: solid;
+    	border-color: #fFF;
+    	border-width: 3px;
+}
+
+.btn.selected {
+	outline: #000 1px solid ;
+}

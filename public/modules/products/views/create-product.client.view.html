@@ -1,20 +1,37 @@
 <section data-ng-controller="ProductsController" data-ng-init="findCategories()">
+
     <div class="page-header">
         <h1>New Product</h1>
     </div>
-	<div class="row">
-		<div class="col-md-6">
-		</div>
+	<form class="form-horizontal" data-ng-submit="create()" novalidate name="myForm">
 
+	<!-------------------------------------------------------------------------main detail---------------------------------------------------------------------->
+	<div class="row">
+		<!------------------------------------------------------------------left main detail---------------------------------------------------------------------->
 		<div class="col-md-6">
-			<form class="form-horizontal" data-ng-submit="create()" novalidate>
+			<div  class="form-group">
+				<div ngf-drop ngf-select ng-model="files" class="drop-box"
+					 ngf-drag-over-class="dragover" ngf-multiple="multiple" ngf-allow-dir="true"
+					 ngf-accept="'.pdf,.jpg'">Drop pdfs or images here or click to upload</div>
+				<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+				<label class="control-label">Files Name:</label>
+				<ul>
+					<li ng-repeat="f in files" style="font:smaller">{{f.name}}</li>
+				</ul>
+				<!--Upload Log:-->
+				<!--<pre>{{log}}</pre>-->
+			</div>
+		</div>
+		<!------------------------------------------------------------------right main detail---------------------------------------------------------------------->
+		<div class="col-md-6">
+
 				<fieldset>
 					<div class="form-group">
-						<label class="control-label">Category</label>
+						<label class="control-label">Category</label><pre>{{product.categories}}</pre>
 						<div class="controls">
-						<ui-select on-remove="categoryRemove($item, $model)" on-select="categorySelect($item, $model)"  class="form-control !important"  multiple ng-model="selectedCategories" theme="bootstrap" >
+						<ui-select on-remove="categoryRemove($item, $model)" on-select="categorySelect($item, $model)"  class="form-control !important"  multiple ng-model="product.categories" theme="bootstrap" >
 							<ui-select-match placeholder="Select Categories">{{$item.code}}</ui-select-match>
-							<ui-select-choices repeat="cate in Categories | propsFilter: {name: $select.search, code: $select.search}">
+							<ui-select-choices repeat="cate in Categories | categoriesFilter: {name: $select.search, code: $select.search}">
 								<div ng-bind-html="cate.code | highlight: $select.search"></div>
 								<small>
 									name: <span ng-bind-html="''+cate.name | highlight: $select.search"></span>
@@ -29,183 +46,121 @@
 					<div class="form-group">
 						<label class="control-label" for="name">Code</label>
 						<div class="controls">
-							<input type="text" data-ng-model="code" id="code" class="form-control" placeholder="Code" required>
+							<input type="text" data-ng-model="product.code" id="code" class="form-control" placeholder="Code" required>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="control-label" for="name">Name</label>
 						<div class="controls">
-							<input type="text" data-ng-model="name" id="name" class="form-control" placeholder="Name" required>
+							<input type="text" data-ng-model="product.name" id="name" class="form-control" placeholder="Name" required>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="control-label" for="name">Description</label>
 						<div class="controls">
-							<input type="text" data-ng-model="desc" id="desc" class="form-control" placeholder="Description" required>
+							<input type="text" data-ng-model="product.desc" id="desc" class="form-control" placeholder="Description" required>
 						</div>
 					</div>
-
+					<div class="form-group">
+						<label class="control-label" for="name" ng-bind="product.modelType"></label>
+						<a class="btn btn-success btn-xs pull-right"  tooltip="Add new model" ng-click="">
+							<i class="glyphicon glyphicon-th"></i> Add new model
+						</a>
+						<div class="controls">
+							<div class="btn-toolbar" role="toolbar">
+								<div ng-repeat="col in product.models | orderBy: 'order'" class="btn-group btn-group-xs" role="group">
+									<label ng-click="selectModel(col.name)" ng-class="{'selected': radioModel.name == col.name}"  name="color"  class="btn color" style="background-color:{{col.value}};color:{{col.value}}" ng-model="radioModel.name" btn-radio="'{{col.name}}'">//</label>
+								</div>
+							</div>
+						</div>
+					</div>
 				</fieldset>
-			</form>
 		</div>
 
 	</div>
 
-
-    <div class="col-md-12">
-        <form class="form-horizontal" data-ng-submit="create()" novalidate>
-            <fieldset>
-                <div class="form-group">
-                    <label class="control-label" for="name">Name</label>
-                    <div class="controls">
-                        <input type="text" data-ng-model="name" id="name" class="form-control" placeholder="Name" required>
-                    </div>
-                </div>
-				<div class="form-group">
-					<label class="control-label" for="date">Date</label>
-					<div class="controls">
-					<p class="input-group">
-					<input id="date" type="date" class="form-control" datepicker-popup ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-					  <span class="input-group-btn">
-						<button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-					  </span>
-					</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">Radio</label>
-					<div class="controls">
-						<pre>{{radioModel || 'null'}}</pre>
-						<div class="btn-group">
-							<label class="btn btn-primary" ng-model="radioModel" btn-radio="'Left'">Left</label>
-							<label class="btn btn-primary" ng-model="radioModel" btn-radio="'Middle'">Middle</label>
-							<label class="btn btn-primary" ng-model="radioModel" btn-radio="'Right'">Right</label>
-						</div>
-						<div class="btn-group">
-							<label class="btn btn-success" ng-model="radioModel" btn-radio="'Left'" uncheckable>Left</label>
-							<label class="btn btn-success" ng-model="radioModel" btn-radio="'Middle'" uncheckable>Middle</label>
-							<label class="btn btn-success" ng-model="radioModel" btn-radio="'Right'" uncheckable>Right</label>
-						</div>
-
-						<div class="radio">
-							<label>
-								<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-								Option one is this and that&mdash;be sure to include why it's great
-							</label>
-						</div>
-						<div class="radio">
-							<label>
-								<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-								Option two can be something else and selecting it will deselect option one
-							</label>
-						</div>
-						<div class="radio disabled">
-							<label>
-								<input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
-								Option three is disabled
-							</label>
-						</div>
-
-						<label class="radio-inline">
-							<input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 1
-						</label>
-						<label class="radio-inline">
-							<input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 2
-						</label>
-						<label class="radio-inline">
-							<input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 3
-						</label>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">Checkbox</label>
-					<div class="controls">
-						<pre>{{checkModel}}</pre>
-						<div class="btn-group">
-							<label class="btn btn-primary" ng-model="checkModel.left" btn-checkbox>Left</label>
-							<label class="btn btn-primary" ng-model="checkModel.middle" btn-checkbox>Middle</label>
-							<label class="btn btn-primary" ng-model="checkModel.right" btn-checkbox>Right</label>
-						</div>
-
-						<div class="checkbox">
-							<label>
-								<input type="checkbox" value="">
-								Option one
-							</label>
-						</div>
-						<div class="checkbox">
-							<label>
-								<input type="checkbox" value="">
-								Option two
-							</label>
-						</div>
-
-						<label class="checkbox-inline">
-							<input type="checkbox" id="inlineCheckbox1" value="option1"> 1
-						</label>
-						<label class="checkbox-inline">
-							<input type="checkbox" id="inlineCheckbox2" value="option2"> 2
-						</label>
-						<label class="checkbox-inline">
-							<input type="checkbox" id="inlineCheckbox3" value="option3"> 3
-						</label>
-
-					</div>
-				</div>
-				<div class="form-group">
-						<label class="control-label">Select</label>
-						<div class="controls">
-							<select class="form-control" ng-model="hstep" ng-options="opt for opt in options.hstep"></select>
-						</div>
-				</div>
-
-				<div class="form-group">
-					<label class="control-label">Select</label>
-					<div class="controls">
-						<select class="form-control" ng-model="mstep" ng-options="opt for opt in options.mstep"></select>
-					</div>
-				</div>
-
-				<div  class="form-group">
-					<div class="checkbox">
+	<div class="row">
+		<div class="col-md-12">
+			<tabset class="form-group" justified="true">
+				<tab ng-repeat="pModel in product.models | orderBy: 'order'" active="pModel.active"  heading="{{pModel.name}}" select="selectModel(pModel.name)">
+					<div class=" checkbox" ng-init="enable = true">
 						<label>
-							<input type="checkbox" ng-model="multiple">
-							upload multiple file
+							<input type="checkbox" ng-model="pModel.published">
+							Published
 						</label>
 					</div>
-					<label class="control-label">watching model:</label>
-					<!--<div class="button" ngf-select ng-model="files" ngf-multiple="multiple">Select File</div>-->
-					<button type="button" class="btn btn-primary" ngf-select ng-model="files" ngf-multiple="multiple">Select File</button>
-					<label class="control-label">on file change:</label>
-					<button type="button" class="btn btn-primary" ngf-select ngf-change="upload($files)" ngf-multiple="multiple">Select File</button>
-					<!--<div class="button" ngf-select ngf-change="upload($files)" ngf-multiple="multiple">Select File</div>-->
-					<label class="control-label">Drop File:</label>
-					<div ngf-drop ngf-select ng-model="files" class="drop-box"
-						 ngf-drag-over-class="dragover" ngf-multiple="multiple" ngf-allow-dir="true"
-						 ngf-accept="'.pdf,.jpg'">Drop pdfs or images here or click to upload</div>
-					<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
-					<label class="control-label">Files Name:</label>
-					<ul>
-						<li ng-repeat="f in files" style="font:smaller">{{f.name}}</li>
-					</ul>
-					Upload Log:
-					<pre>{{log}}</pre>
-				</div>
+					<div class=" checkbox" ng-init="enable = true">
+						<label>
+							<input type="checkbox" ng-model="pModel.enable">
+							Enable on
+						</label>
+					</div>
+					<div class="input-group">
+						<input id="date" type="date" class="form-control" ng-disabled="!pModel.enable" datepicker-popup ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-07-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+								  <span class="input-group-btn">
+									<button type="button" class="btn btn-default" ng-disabled="!pModel.enable" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+								  </span>
+					</div>
+					<div class=" checkbox" ng-init="enable = false">
+						<label>
+							<input type="checkbox" ng-model="enable">
+							Sync.
+						</label>
+					</div>
+					<div>
+						<table class="table table-striped">
+							<tr>
+								<td>{{pModel.optionType}}</td>
+								<td>Quantity</td>
+								<td>Price</td>
+								<td>Supplier</td>
+								<td>Stock Type</td>
+							</tr>
+							<tr ng-repeat="pOption in pModel.options | orderBy: 'order'">
+								<td>{{pOption.value}}</td>
+								<td><input type="text" data-ng-model="pOption.qty" class="form-control" placeholder="Quantity" required></td>
+								<td><input type="text" data-ng-model="pOption.price" class="form-control" placeholder="Price" required></td>
+								<td><select class="form-control" ng-model="pOption.supplier" ng-options="opt for opt in options.supplier"></select></td>
+								<td><select class="form-control" ng-model="pOption.stockType" ng-options="opt for opt in options.stockType"></select></td>
+							</tr>
+						</table>
 
-				<tabset class="form-group" justified="true">
-					<tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disable="tab.disabled">
-						{{tab.content}}
-					</tab>
-				</tabset>
+					</div>
+				</tab>
+			</tabset>
+		</div>
+	</div>
 
-				<div class="form-group">
-					<input type="submit" class="btn btn-default">
-				</div>
-				<div data-ng-show="error" class="text-danger">
-					<strong data-ng-bind="error"></strong>
-				</div>
+	<!-------------------------------------------------------------------------detail tabs---------------------------------------------------------------------->
+	<div class="row">
+		<div class="col-md-12">
+			<tabset class="form-group" justified="true">
+				<tab ng-repeat="tab in product.tabs | orderBy: 'order'" heading="{{tab.title}}" active="tab.active">
+					<textarea ui-tinymce="tinymceOptions" ng-model="tab.content"></textarea>
+				</tab>
+			</tabset>
+			</div>
+	</div>
 
-            </fieldset>
-        </form>
-    </div>
+	<!------------------------------------------------------------------------- submit form---------------------------------------------------------------------->
+	<div class="row">
+		<div class="col-md-12">
+
+				<fieldset>
+
+					<div class="form-group">
+						<input type="submit" class="btn btn-default">
+						<button class="btn btn-default" ng-click="preview" >Preview</button>
+					</div>
+					<div data-ng-show="error" class="text-danger">
+						<strong data-ng-bind="error"></strong>
+					</div>
+
+				</fieldset>
+
+		</div>
+	</div>
+
+	</form>
+
 </section>

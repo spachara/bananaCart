@@ -58,7 +58,9 @@ module.exports = {
 				'public/lib/ng-file-upload/ng-file-upload.min.js',
 				'public/lib/angular-ui-grid/ui-grid.js',
                	'public/lib/angular-sanitize/angular-sanitize.js',
-                'public/lib/angular-ui-select/dist/select.js'
+                'public/lib/angular-ui-select/dist/select.js',
+                'public/lib/tinymce-dist/tinymce.min.js',
+                'public/lib/angular-ui-tinymce/src/tinymce.js'
 			]
 		},
 		css: [
